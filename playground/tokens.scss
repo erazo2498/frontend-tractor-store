@@ -1,0 +1,287 @@
+// ==========================================
+// DESIGN TOKENS — Tractor Store
+// ==========================================
+// Los Design Tokens son las "decisiones de diseño" codificadas como variables.
+// Son la base del Design System y la "fuente de verdad" visual del proyecto.
+// Todos los componentes deben usar estos tokens en vez de valores hardcodeados.
+// En la Fase siguiente, estos tokens se convertirán a CSS Custom Properties
+// y eventualmente a TailwindCSS.
+
+// ==========================================
+// 1. COLORES
+// ==========================================
+// Paleta principal del Tractor Store
+$color-primary: #d32f2f;          // Rojo tractor — color de marca
+$color-primary-dark: #b71c1c;     // Rojo oscuro — hover/active states
+$color-primary-light: #ef5350;    // Rojo claro — backgrounds sutiles
+$color-secondary: #388e3c;        // Verde campo — acciones de éxito
+$color-secondary-dark: #2e7d32;   // Verde oscuro — hover
+
+// Neutrales (escala de grises)
+$color-background: #fafafa;       // Fondo general de la página
+$color-surface: #ffffff;          // Fondo de tarjetas y contenedores
+$color-text: #333333;             // Texto principal (alta legibilidad)
+$color-text-light: #757575;       // Texto secundario (descripciones, hints)
+$color-text-inverse: #ffffff;     // Texto sobre fondos oscuros
+$color-border: #e0e0e0;           // Bordes de separación
+$color-divider: #eeeeee;          // Líneas divisorias más sutiles
+
+// Feedback (estados semánticos)
+$color-error: #c62828;            // Errores, validaciones fallidas
+$color-success: #2e7d32;          // Operaciones exitosas
+$color-warning: #f9a825;          // Advertencias
+$color-info: #1565c0;             // Información neutral
+
+// ==========================================
+// 2. TIPOGRAFÍA
+// ==========================================
+// Usamos Inter como fuente principal (Google Fonts).
+// El sistema de tamaños sigue una escala modular para consistencia visual.
+$font-family-base: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+$font-family-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+// Pesos
+$font-weight-regular: 400;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+
+// Alturas de línea
+$line-height-tight: 1.2;          // Títulos
+$line-height-base: 1.5;           // Texto normal
+$line-height-relaxed: 1.75;       // Texto largo / párrafos
+
+// ==========================================
+// 3. FUNCIONES SCSS (Retornan un valor calculado)
+// ==========================================
+// Las funciones se usan cuando necesitas CALCULAR un valor.
+// A diferencia de un mixin (que emite código CSS), una función solo devuelve un valor.
+
+// Convierte pixeles a rem basado en 16px (el default del navegador).
+// ¿Por qué rem? Porque respeta el tamaño de fuente que el usuario configure
+// en su navegador. Si un usuario con baja visión pone 20px como base,
+// nuestros 1rem se escalarán proporcionalmente.
+@function to-rem($pixels) {
+  @return calc($pixels / 16px * 1rem);
+}
+
+// Tamaños de fuente (definidos después de la función para poder usar to-rem)
+$font-size-xs: to-rem(12px);      // Etiquetas pequeñas, badges
+$font-size-sm: to-rem(14px);      // Texto auxiliar, captions
+$font-size-base: to-rem(16px);    // Texto normal (= 1rem)
+$font-size-lg: to-rem(18px);      // Texto destacado
+$font-size-xl: to-rem(20px);      // Subtítulos
+$font-size-2xl: to-rem(24px);     // Títulos de sección
+$font-size-3xl: to-rem(32px);     // Títulos principales
+$font-size-4xl: to-rem(40px);     // Hero / display
+
+// ==========================================
+// 4. ESPACIADO (Sistema de 8px)
+// ==========================================
+// Todas las distancias (padding, margin, gap) son múltiplos de 8px.
+// Esto crea un ritmo visual consistente y alineaciones naturales.
+// ¿Por qué 8px? Porque es divisible por 2 y 4, lo cual crea buenas alineaciones
+// en pantallas de cualquier densidad de píxeles.
+$spacing-unit: 8px;               // Unidad base
+
+$spacing-xs:  $spacing-unit * 0.5;  //  4px
+$spacing-sm:  $spacing-unit;        //  8px
+$spacing-md:  $spacing-unit * 2;    // 16px
+$spacing-lg:  $spacing-unit * 3;    // 24px
+$spacing-xl:  $spacing-unit * 4;    // 32px
+$spacing-2xl: $spacing-unit * 6;    // 48px
+$spacing-3xl: $spacing-unit * 8;    // 64px
+
+// ==========================================
+// 5. BORDES, RADIOS Y SOMBRAS
+// ==========================================
+$border-radius-sm: 4px;           // Botones pequeños, badges
+$border-radius-md: 8px;           // Tarjetas, inputs
+$border-radius-lg: 16px;          // Modales, contenedores grandes
+$border-radius-full: 9999px;      // Completamente redondo (avatares, pills)
+
+// Sombras (elevation system — inspirado en Material Design)
+// Más sombra = más "elevado" visualmente = más importante
+$shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12);     // Tarjetas base
+$shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);       // Hover, dropdowns
+$shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.15);    // Modales, popovers
+$shadow-xl: 0 20px 50px rgba(0, 0, 0, 0.2);     // Diálogos elevados
+
+// ==========================================
+// 6. BREAKPOINTS (Responsive Design)
+// ==========================================
+// Los breakpoints definen en qué ancho de pantalla cambia el layout.
+// Mobile-first: diseñas para móvil y luego añades reglas para pantallas grandes.
+$breakpoint-sm: 576px;            // Teléfonos grandes (landscape)
+$breakpoint-md: 768px;            // Tablets
+$breakpoint-lg: 1024px;           // Laptops
+$breakpoint-xl: 1280px;           // Desktops
+$breakpoint-2xl: 1536px;          // Pantallas grandes
+
+// ==========================================
+// 7. TRANSICIONES
+// ==========================================
+$transition-fast: 150ms ease;     // Hover, focus
+$transition-base: 250ms ease;     // Cambios de estado
+$transition-slow: 400ms ease;     // Apariciones, modales
+
+// ==========================================
+// 8. MIXINS (Bloques de CSS reutilizables)
+// ==========================================
+// Un mixin es como una "función" que EMITE código CSS (no solo un valor).
+// Se usa con @include.
+// ¿Cuándo usar mixin vs función?
+//   - Función: cuando necesitas calcular UN VALOR (ej. to-rem → devuelve un número)
+//   - Mixin: cuando necesitas emitir VARIAS PROPIEDADES CSS juntas
+
+// Centra un elemento con Flexbox
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// Trunca texto con ellipsis (...) si se desborda
+@mixin text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// Mixin con parámetros: responsive breakpoint
+// Uso: @include respond-to('md') { ... }
+@mixin respond-to($breakpoint) {
+  @if $breakpoint == 'sm' { @media (min-width: $breakpoint-sm) { @content; } }
+  @else if $breakpoint == 'md' { @media (min-width: $breakpoint-md) { @content; } }
+  @else if $breakpoint == 'lg' { @media (min-width: $breakpoint-lg) { @content; } }
+  @else if $breakpoint == 'xl' { @media (min-width: $breakpoint-xl) { @content; } }
+}
+
+// ==========================================
+// 9. BEM (Block, Element, Modifier) + Anidamiento
+// ==========================================
+// BEM es una METODOLOGÍA de nombrado de clases CSS:
+//   .block          → Componente independiente y reutilizable
+//   .block__element → Parte funcional del bloque (no tiene sentido sola)
+//   .block--modifier→ Variante visual o de estado del bloque
+//
+// ¿Por qué BEM?
+// 1. Evita conflictos de nombres (cada clase es única y descriptiva)
+// 2. Especificidad plana (todo es una sola clase, no cascadas complejas)
+// 3. Autoexplicativo: .ts-product-card__button--disabled se entiende solo
+//
+// Regla de anidamiento: MÁXIMO 1 nivel de anidamiento BEM.
+// ❌ .block__element__subelement (demasiado anidamiento)
+// ✅ .block__subelement (aplanar el nombre)
+
+// BLOQUE: Tarjeta de producto — componente independiente y reutilizable
+.ts-product-card {
+  background-color: $color-surface;
+  border: 1px solid $color-border;
+  border-radius: $border-radius-md;
+  padding: $spacing-md;
+  box-shadow: $shadow-sm;
+  font-family: $font-family-base;
+  transition: box-shadow $transition-base, transform $transition-base;
+
+  // Hover: elevamos la tarjeta con más sombra y un sutil scale
+  &:hover {
+    box-shadow: $shadow-md;
+    transform: translateY(-2px);
+  }
+
+  // ELEMENTO: Imagen del producto
+  &__image {
+    width: 100%;
+    height: auto;
+    border-radius: $border-radius-sm;
+    margin-bottom: $spacing-sm;
+    object-fit: cover;
+  }
+
+  // ELEMENTO: Título del producto
+  &__title {
+    color: $color-text;
+    font-size: $font-size-2xl;
+    font-weight: $font-weight-semibold;
+    line-height: $line-height-tight;
+    margin-bottom: $spacing-sm;
+    @include text-truncate;
+  }
+
+  // ELEMENTO: Descripción
+  &__description {
+    color: $color-text-light;
+    font-size: $font-size-sm;
+    line-height: $line-height-base;
+    margin-bottom: $spacing-md;
+  }
+
+  // ELEMENTO: Precio
+  &__price {
+    color: $color-primary;
+    font-size: $font-size-xl;
+    font-weight: $font-weight-bold;
+    margin-bottom: $spacing-md;
+  }
+
+  // ELEMENTO: Botón de acción
+  &__button {
+    @include flex-center;
+    width: 100%;
+    padding: $spacing-sm $spacing-md;
+    background-color: $color-primary;
+    color: $color-text-inverse;
+    border: none;
+    border-radius: $border-radius-sm;
+    font-size: $font-size-base;
+    font-weight: $font-weight-medium;
+    cursor: pointer;
+    transition: background-color $transition-fast;
+
+    // Hover del botón
+    &:hover {
+      background-color: $color-primary-dark;
+    }
+
+    // MODIFICADOR: Estado deshabilitado
+    &--disabled {
+      background-color: $color-text-light;
+      cursor: not-allowed;
+      opacity: 0.6;
+
+      &:hover {
+        background-color: $color-text-light; // No cambia en hover
+      }
+    }
+
+    // MODIFICADOR: Variante secundaria (ej. "Ver detalles")
+    &--secondary {
+      background-color: transparent;
+      color: $color-primary;
+      border: 1px solid $color-primary;
+
+      &:hover {
+        background-color: rgba($color-primary, 0.08);
+      }
+    }
+  }
+
+  // MODIFICADOR DEL BLOQUE: Tarjeta en modo compacto (para listados)
+  &--compact {
+    padding: $spacing-sm;
+
+    .ts-product-card__title {
+      font-size: $font-size-lg;
+    }
+
+    .ts-product-card__description {
+      display: none;
+    }
+  }
+
+  // Responsive: en móvil la tarjeta ocupa todo el ancho
+  @include respond-to('md') {
+    max-width: 320px;
+  }
+}
