@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laboratorio de Shadow DOM</title>
+    <style>
+        /* CSS GLOBAL (Simulando un error de otro equipo) */
+        /* Intentaremos forzar que TODOS los botones sean azules y feos */
+        button {
+            background-color: blue !important;
+            color: yellow !important;
+            border: 5px dashed black !important;
+            font-size: 20px;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            padding: 2rem;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Tractor Store: Prueba de Shadow DOM</h1>
+    <hr>
+
+    <h2>1. Botón HTML Normal</h2>
+    <p>Este botón es víctima del CSS global mal escrito:</p>
+    <button>Soy un botón normal</button>
+
+    <br><br>
+
+    <h2>2. Nuestro Web Component (Equipo Decide)</h2>
+    <p>Este botón está protegido por el Shadow DOM. El CSS global no puede tocarlo:</p>
+    <tractor-button label="Añadir al Carrito"></tractor-button>
+    <tractor-button label="Comprar Variante"></tractor-button>
+
+    <script type="module" src="../dist/native-button.js"></script>
+
+    <script>
+        // Escuchamos el CustomEvent ('tractor:button:clicked') que viaja desde el Shadow DOM
+        document.addEventListener('tractor:button:clicked', (event) => {
+            alert('¡Evento capturado en la página principal! Revisa la consola.');
+            console.log('El Web Component se comunicó exitosamente:', event);
+        });
+    </script>
+</body>
+
+</html>
