@@ -1,0 +1,17 @@
+{
+  "name": "@tractor-store/playground",
+  "version": "0.1.0",
+  "description": "Playground de la Fase 1 — Fundamentos del lenguaje y runtime para el Tractor Store",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "build": "tsc",
+    "sass:build": "sass playground/tokens.scss dist/tokens.css",
+    "sass:watch": "sass --watch playground/tokens.scss dist/tokens.css"
+  },
+  "devDependencies": {
+    "typescript": "~5.7.0",
+    "sass": "~1.80.0"
+  }
+}
