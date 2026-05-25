@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Angular Elements Lab</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 2rem;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Usamos CSS Custom Properties para alterar el Shadow DOM desde fuera */
+        ts-cart-counter {
+            --cart-counter-bg: #2e7d32;
+            --cart-counter-color: #ffffff;
+        }
+
+        .controls {
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid #ddd;
+        }
+
+        button.global-btn {
+            background-color: #1976d2;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button.global-btn:hover {
+            background-color: #1565c0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Prueba de Angular Elements</h1>
+        <p>Este contador fue creado en Angular 19, exportado como Web Component, y encapsulado con Shadow DOM.</p>
+
+        <hr>
+
+        <h2>Componente: <code>&lt;ts-cart-counter&gt;</code></h2>
+        <!-- Aquí está nuestro Angular Element, consumido como HTML estándar -->
+        <ts-cart-counter count="3"></ts-cart-counter>
+
+        <div class="controls">
+            <h3>Simular comunicación entre Micro-Frontends</h3>
+            <p>Hacer clic en este botón nativo disparará un evento global (<i>checkout:cart-updated</i>), y el
+                componente de Angular Elements debería escucharlo y actualizar su contador.</p>
+            <button id="btn-add" class="global-btn">Simular Añadir al Carrito Globalmente (+1)</button>
+        </div>
+    </div>
+
+    <!-- Cargamos los polyfills y el script generado por Angular -->
+    <script type="module" src="elements-lab/dist/elements-lab/browser/polyfills-IOO3XMUJ.js"></script>
+    <script type="module" src="elements-lab/dist/elements-lab/browser/main-A4OOT2RV.js"></script>
+
+    <script>
+        // 1. Escuchar el evento (Output) que emite nuestro Angular Element
+        const cartCounter = document.querySelector('ts-cart-counter');
+
+        cartCounter.addEventListener('cartClick', (event) => {
+            alert('¡Hiciste clic en el Angular Element! Angular disparó este evento nativo.');
+            console.log('Evento de click emitido desde ts-cart-counter:', event);
+        });
+
+        // 2. Disparar un Custom Event global para que el Angular Element lo escuche
+        const btnAdd = document.getElementById('btn-add');
+        let globalCount = 3;
+
+        btnAdd.addEventListener('click', () => {
+            globalCount++;
+
+            // Creamos el CustomEvent. No es necesario 'composed' porque viaja por 'window', 
+            // pero lo agregamos como buena práctica para simular MFEs complejos.
+            const evt = new CustomEvent('checkout:cart-updated', {
+                detail: { count: globalCount },
+                bubbles: true,
+                composed: true
+            });
+
+            window.dispatchEvent(evt);
+            console.log('Evento global disparado: checkout:cart-updated', { count: globalCount });
+        });
+    </script>
+</body>
+
+</html>
