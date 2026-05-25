@@ -4,7 +4,9 @@
   "projectType": "application",
   "prefix": "app",
   "sourceRoot": "packages/mfe-explore/src",
-  "tags": [],
+  "tags": [
+    "type:mfe"
+  ],
   "targets": {
     "build": {
       "executor": "@angular/build:application",

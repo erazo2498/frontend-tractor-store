@@ -4,7 +4,9 @@
   "sourceRoot": "packages/ts-design-system/src",
   "prefix": "lib",
   "projectType": "library",
-  "tags": [],
+  "tags": [
+    "type:shared"
+  ],
   "targets": {
     "lint": {
       "executor": "@nx/eslint:lint"

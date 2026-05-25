@@ -4,11 +4,15 @@
   "projectType": "application",
   "prefix": "app",
   "sourceRoot": "apps/shell/src",
-  "tags": [],
+  "tags": [
+    "type:shell"
+  ],
   "targets": {
     "build": {
       "executor": "@angular/build:application",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "outputPath": "dist/apps/shell",
         "browser": "apps/shell/src/main.ts",
@@ -20,7 +24,9 @@
             "input": "apps/shell/public"
           }
         ],
-        "styles": ["apps/shell/src/styles.scss"]
+        "styles": [
+          "apps/shell/src/styles.scss"
+        ]
       },
       "configurations": {
         "production": {
