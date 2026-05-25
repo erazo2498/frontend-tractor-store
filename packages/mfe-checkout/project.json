@@ -8,7 +8,9 @@
   "targets": {
     "build": {
       "executor": "@angular/build:application",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "outputPath": "dist/packages/mfe-checkout",
         "browser": "packages/mfe-checkout/src/main.ts",
@@ -20,7 +22,9 @@
             "input": "packages/mfe-checkout/public"
           }
         ],
-        "styles": ["packages/mfe-checkout/src/styles.scss"]
+        "styles": [
+          "packages/mfe-checkout/src/styles.scss"
+        ]
       },
       "configurations": {
         "production": {
@@ -49,6 +53,9 @@
     "serve": {
       "continuous": true,
       "executor": "@angular/build:dev-server",
+      "options": {
+        "port": 4201
+      },
       "configurations": {
         "production": {
           "buildTarget": "mfe-checkout:build:production"

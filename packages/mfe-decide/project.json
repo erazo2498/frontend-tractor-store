@@ -8,7 +8,9 @@
   "targets": {
     "build": {
       "executor": "@angular/build:application",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "outputPath": "dist/packages/mfe-decide",
         "browser": "packages/mfe-decide/src/main.ts",
@@ -20,7 +22,9 @@
             "input": "packages/mfe-decide/public"
           }
         ],
-        "styles": ["packages/mfe-decide/src/styles.scss"]
+        "styles": [
+          "packages/mfe-decide/src/styles.scss"
+        ]
       },
       "configurations": {
         "production": {
@@ -49,6 +53,9 @@
     "serve": {
       "continuous": true,
       "executor": "@angular/build:dev-server",
+      "options": {
+        "port": 4202
+      },
       "configurations": {
         "production": {
           "buildTarget": "mfe-decide:build:production"
