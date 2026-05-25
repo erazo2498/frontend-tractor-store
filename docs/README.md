@@ -229,3 +229,108 @@ pnpm exec nx g @nx/angular:app --directory=packages/mfe-explore --routing --styl
 ```
 
 ---
+
+# 📦 Fase 3 — Monorepo y Tooling (pnpm + Nx)
+
+Esta sección documenta la arquitectura del monorepo unificado del Tractor Store, las reglas de límites estrictos entre dominios y las optimizaciones implementadas para mejorar la caché y la velocidad de desarrollo.
+
+## 6. Arquitectura del Monorepo
+
+En la raíz del proyecto, el archivo `pnpm-workspace.yaml` orquesta las dependencias compartidas y define qué carpetas pertenecen a nuestro ecosistema:
+
+```yaml
+packages:
+  - 'apps/*'        # Contiene el host unificado (Shell)
+  - 'packages/*'    # Contiene los Micro-Frontends (MFEs) y librerías transversales
+  - 'libs/*'        # Librerías secundarias
+  - 'playground/*'  # Nuestro laboratorio de pruebas aislado (como elements-lab)
+```
+
+### Distribución de Aplicaciones y Puertos
+
+Cada equipo ejecuta su aplicación Angular 19 de forma autónoma en puertos dedicados, evitando colisiones de red:
+
+*   **`apps/shell`** (Host / Orquestador central) ➜ Puerto `4200`
+*   **`packages/mfe-checkout`** (Transaccional) ➜ Puerto `4201`
+*   **`packages/mfe-decide`** (Detalle de Producto) ➜ Puerto `4202`
+*   **`packages/mfe-explore`** (Descubrimiento y Listados) ➜ Puerto `4203`
+*   **`packages/shared-catalog`** (Librería compartida de modelos y eventos) ➜ Biblioteca (Lib)
+*   **`packages/ts-design-system`** (Librería compartida de componentes y estilos) ➜ Biblioteca (Lib)
+
+---
+
+## 🛡️ 7. Fronteras Arquitectónicas (Tags de Nx + ESLint)
+
+Para evitar que los Micro-Frontends se acoplen entre sí (lo que arruinaría la autonomía de los equipos), se implementó un sistema estricto de **etiquetas (tags)** en los archivos `project.json` y se validó en `eslint.config.mjs` usando la regla `@nx/enforce-module-boundaries`.
+
+### Clasificación de Etiquetas
+1.  **`type:shell`**: Reservado exclusivamente para la aplicación anfitriona.
+2.  **`type:mfe`**: Asignado a los Micro-Frontends autónomos (`explore`, `decide`, `checkout`).
+3.  **`type:shared`**: Asignado a librerías de utilidad transversal (`shared-catalog`, `ts-design-system`).
+
+### Matriz de Dependencias Permitidas
+El linter valida la arquitectura en tiempo real bajo estas estrictas restricciones:
+
+```mermaid
+graph TD
+    Shell["Shell App (type:shell)"] -->|Puede importar| MFE["Micro-Frontends (type:mfe)"]
+    Shell -->|Puede importar| Shared["Librerías (type:shared)"]
+    MFE -->|Puede importar| Shared
+    MFE -.->|PROHIBIDO IMPORTAR| MFE
+    Shared -.->|PROHIBIDO IMPORTAR| MFE
+    Shared -.->|PROHIBIDO IMPORTAR| Shell
+```
+
+*   **`type:shell`** puede depender de `type:mfe` y `type:shared`.
+*   **`type:mfe`** solo puede depender de `type:shared`. **Tienen prohibido importarse entre sí** (por ejemplo, `mfe-explore` no puede importar nada de `mfe-checkout`).
+*   **`type:shared`** solo puede depender de otras librerías `type:shared`. Tienen terminantemente prohibido importar código de un MFE o de la Shell.
+
+---
+
+## ⚡ 8. Optimización de Caché y CI/CD (nx affected)
+
+Para acelerar la integración continua (CI) y evitar volver a compilar código que no ha sufrido modificaciones, optimizamos el archivo `nx.json`.
+
+### namedInputs: Filtrado Inteligente de Entradas
+Excluimos los archivos que no afectan el empaquetado final de producción (como documentación o pruebas unitarias) para que no invaliden la caché de compilación:
+
+```json
+"production": [
+  "default",
+  "!{projectRoot}/.eslintrc.json",
+  "!{projectRoot}/eslint.config.mjs",
+  "!{projectRoot}/**/*.md",          // 📝 Cambiar la documentación no recompila la app
+  "!{projectRoot}/**/*.spec.ts"       // 🧪 Cambiar un test unitario no altera el bundle de producción
+]
+```
+
+### Comandos de Ejecución Clave
+*   **Correr todo en paralelo:** Levanta las 4 aplicaciones simultáneamente:
+    ```bash
+    pnpm exec nx run-many --target=serve --projects=shell,mfe-explore,mfe-decide,mfe-checkout
+    ```
+*   **Ejecutar Análisis Estático (Lint):** Valida las fronteras de tags y errores de tipado en todo el monorepo:
+    ```bash
+    pnpm exec nx run-many --target=lint
+    ```
+*   **Ver el Grafo de Dependencias:** Abre un mapa visual interactivo en tu navegador para auditar tu arquitectura:
+    ```bash
+    pnpm exec nx graph
+    ```
+*   **Compilar solo lo afectado (nx affected):** Ideal para Pipelines de CI/CD. Compila y linteriza exclusivamente los proyectos modificados en tu commit o Pull Request en comparación con la rama base:
+    ```bash
+    pnpm exec nx affected --target=build --base=origin/main
+    ```
+
+---
+
+## 📖 Conceptos de Aprendizaje Avanzado (El "Por qué" de las Cosas)
+
+### pnpm workspaces vs. Publicación Tradicional en npm
+*   **Publicación Tradicional:** Exige subir el paquete a un registro (`npm publish`), incrementar versiones semánticas y ejecutar `npm install` en cada proyecto que lo consuma. Esto ralentiza enormemente el desarrollo local.
+*   **pnpm Workspaces:** Enlaza tus librerías locales (`shared-catalog` o `ts-design-system`) directamente en el `node_modules` de tu MFE mediante accesos directos del sistema de archivos (**Symlinks**). Si cambias un tipo en el catálogo compartido, tus MFEs ven el cambio de inmediato en tiempo real sin compilar ni publicar.
+
+### La Importancia del Frozen Lockfile en CI/CD
+En tu pipeline de despliegue en la nube, es vital garantizar que se instale exactamente lo mismo que tienes en tu máquina local.
+*   Al ejecutar `pnpm install --frozen-lockfile` (o `npm ci`), el gestor de paquetes **tiene prohibido** actualizar cualquier librería en segundo plano o reescribir el archivo lock.
+*   Si hay alguna discrepancia entre tu `package.json` y el `pnpm-lock.yaml`, el build en la nube fallará inmediatamente. Esto previene el clásico bug: *"En mi máquina local funcionaba pero se rompió en producción"*.
