@@ -16,10 +16,20 @@ export default [
           enforceBuildableLibDependency: true,
           allow: ['^.*/eslint(\\.base)?\\.config\\.[cm]?[jt]s$'],
           depConstraints: [
+            // --- INICIO DE NUESTRAS REGLAS DE ARQUITECTURA ---
             {
-              sourceTag: '*',
-              onlyDependOnLibsWithTags: ['*'],
+              sourceTag: 'type:shell',
+              onlyDependOnLibsWithTags: ['type:mfe', 'type:shared'],
             },
+            {
+              sourceTag: 'type:mfe',
+              onlyDependOnLibsWithTags: ['type:shared'],
+            },
+            {
+              sourceTag: 'type:shared',
+              onlyDependOnLibsWithTags: ['type:shared'],
+            },
+            // --- FIN DE NUESTRAS REGLAS ---
           ],
         },
       ],
