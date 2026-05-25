@@ -1,63 +1,46 @@
-# ==========================================
-# DEPENDENCIAS
-# ==========================================
-# node_modules/ contiene TODAS las dependencias descargadas.
-# No se commitea porque:
-# 1. Puede pesar cientos de MB
-# 2. Se regenera con "pnpm install" usando el lockfile
-node_modules/
+# See https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
 
-# ==========================================
-# ARCHIVOS DE BUILD / COMPILACIÓN
-# ==========================================
-# Generados por "tsc" (TypeScript) y "sass" (SCSS).
-# No se commitean porque se pueden regenerar desde el código fuente.
-dist/
+# compiled output
+dist
+tmp
+out-tsc
 
-# ==========================================
-# LOGS
-# ==========================================
-*.log
-npm-debug.log*
-pnpm-debug.log*
+# dependencies
+node_modules
 
-# ==========================================
-# SISTEMA OPERATIVO
-# ==========================================
-# macOS
-.DS_Store
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
 
-# Windows
-Thumbs.db
-desktop.ini
-
-# Linux
-*~
-
-# ==========================================
-# EDITORES / IDE
-# ==========================================
-# VS Code (settings locales del usuario, no del proyecto)
+# IDE - VSCode
 .vscode/*
 !.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
 !.vscode/extensions.json
 
-# JetBrains (WebStorm, IntelliJ)
-.idea/
+# misc
+/.sass-cache
+/connect.lock
+/coverage
+/libpeerconnection.log
+npm-debug.log
+yarn-error.log
+testem.log
+/typings
 
-# ==========================================
-# VARIABLES DE ENTORNO
-# ==========================================
-# NUNCA commitear archivos con secretos (tokens, passwords, API keys).
-# .env.example sí se commitea como plantilla.
-.env
-.env.local
-.env.*.local
+# System Files
+.DS_Store
+Thumbs.db
 
-# ==========================================
-# CACHE Y TEMPORALES
-# ==========================================
-.cache/
-.tmp/
-.temp/
-*.tsbuildinfo
+.nx/cache
+.nx/workspace-data
+.claude/worktrees
+.claude/settings.local.json
+
+.angular
