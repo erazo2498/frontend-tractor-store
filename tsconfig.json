@@ -1,103 +1,12 @@
 {
-  // ==========================================
-  // TSCONFIG.JSON — Configuración del compilador TypeScript
-  // ==========================================
-  // Este archivo le dice a TypeScript CÓMO compilar tu código.
-  // La guía lo pide explícitamente: strict mode, paths, targets, declaration files.
   "compilerOptions": {
-    // ------------------------------------------
-    // TARGET Y MODULE (¿A qué JavaScript compilar?)
-    // ------------------------------------------
-    // "target" define a qué versión de JS se compila tu TypeScript.
-    // ES2022 incluye: top-level await, class fields, at(), Object.hasOwn()
-    // Si pusieras "ES5", TypeScript convertiría arrow functions a function() {}, etc.
-    "target": "ES2022",
-    // "module" define el sistema de módulos del código emitido.
-    // "ESNext" = usa import/export nativos (ESM), el estándar moderno.
-    // Si pusieras "CommonJS", convertiría tus imports a require().
-    "module": "ESNext",
-    // "moduleResolution" define CÓMO TypeScript busca los módulos cuando haces import.
-    // "bundler" es el modo moderno: asume que un bundler (Vite, Webpack) resolverá los paths.
-    // Soporta imports con extensión o sin ella, y "exports" en package.json.
-    "moduleResolution": "bundler",
-    // ------------------------------------------
-    // STRICT MODE (Seguridad de tipos al máximo)
-    // ------------------------------------------
-    // "strict": true activa TODAS estas flags de una sola vez:
-    //   - strictNullChecks: null y undefined son tipos separados (no se asignan a todo)
-    //   - strictFunctionTypes: chequeo estricto de parámetros en funciones
-    //   - strictBindCallApply: chequea .bind(), .call(), .apply() correctamente
-    //   - strictPropertyInitialization: las propiedades de clase deben inicializarse
-    //   - noImplicitAny: error si TS no puede inferir el tipo (en vez de poner 'any')
-    //   - noImplicitThis: error si 'this' tiene tipo implícito 'any'
-    //   - alwaysStrict: emite "use strict" en cada archivo
-    // En Angular, strict: true es el default y SIEMPRE deberías tenerlo activado.
     "strict": true,
-    // ------------------------------------------
-    // DECLARATION FILES (Archivos .d.ts)
-    // ------------------------------------------
-    // "declaration": genera archivos .d.ts junto con el JS compilado.
-    // Estos archivos contienen SOLO los tipos (sin lógica) y permiten que
-    // otros proyectos/librerías importen tus tipos sin ver la implementación.
-    // Es fundamental cuando publicas una librería o creas librerías compartidas en un monorepo.
-    // "declaration": true,
-    // "declarationDir": carpeta donde se guardan los .d.ts generados.
-    // "declarationDir": "./dist/types",
-    // "outDir": carpeta donde se guarda el JavaScript compilado.
     "outDir": "./dist",
-    // ------------------------------------------
-    // PATH ALIASES (Imports más limpios)
-    // ------------------------------------------
-    // "baseUrl" es el punto de referencia para resolver los paths relativos.
     "baseUrl": ".",
-    // "paths" permite crear atajos de importación.
-    // En vez de: import { Product } from '../../../playground/domain'
-    // Escribes:  import { Product } from '@tractor/domain'
-    // Esto es EXACTAMENTE lo que Nx hace en un monorepo para las librerías compartidas.
-    "paths": {
-      "@tractor/domain": [
-        "./playground/domain.ts"
-      ],
-      "@tractor/types/*": [
-        "./playground/*"
-      ]
-    },
-    // ------------------------------------------
-    // DECORADORES (Necesarios para Angular)
-    // ------------------------------------------
-    // Angular usa decoradores (@Component, @Injectable, @Input, etc.) intensivamente.
-    // Estas dos flags habilitan su uso en TypeScript.
-    // Nota: Angular 19 ya soporta decoradores estándar de TC39 (Stage 3),
-    // pero la mayoría del ecosistema aún usa los experimentales.
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    // ------------------------------------------
-    // INTEROPERABILIDAD Y CALIDAD
-    // ------------------------------------------
-    // "esModuleInterop": permite importar módulos CommonJS con sintaxis ESM.
-    // Sin esto, import express from 'express' fallaría (tendrías que usar import * as express).
     "esModuleInterop": true,
-    // "skipLibCheck": no chequea tipos dentro de archivos .d.ts de node_modules.
-    // Acelera la compilación y evita errores en librerías de terceros.
-    "skipLibCheck": true,
-    // "forceConsistentCasingInFileNames": error si importas un archivo con
-    // diferente capitalización (ej. import './Domain' cuando el archivo es 'domain.ts').
-    // Previene bugs en Linux donde el filesystem es case-sensitive.
     "forceConsistentCasingInFileNames": true,
-    // "resolveJsonModule": permite importar archivos .json directamente.
-    // Útil para: import packageJson from './package.json'
-    "resolveJsonModule": true,
-    // "sourceMap": genera archivos .map que permiten debuggear el TypeScript
-    // original en el navegador (en vez del JavaScript compilado).
-    "sourceMap": true
+    "resolveJsonModule": true
   },
-  // "include": qué archivos compilar
-  "include": [
-    "playground/**/*.ts"
-  ],
-  // "exclude": qué archivos ignorar
-  "exclude": [
-    "node_modules",
-    "dist"
-  ]
+  "include": ["playground/**/*.ts"],
+  "extends": "./tsconfig.base.json"
 }

@@ -1,0 +1,23 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "sourceMap": true,
+    "moduleResolution": "bundler",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "target": "ES2022",
+    "module": "ESNext",
+    "skipLibCheck": true,
+    "paths": {
+      "@tractor/domain": ["./playground/domain.ts"],
+      "@tractor/types/*": ["./playground/*"],
+      "@tractor-store/shared-catalog": [
+        "./packages/shared-catalog/src/index.ts"
+      ],
+      "@tractor-store/ts-design-system": [
+        "./packages/ts-design-system/src/index.ts"
+      ]
+    }
+  },
+  "exclude": ["node_modules", "dist"]
+}
