@@ -147,4 +147,85 @@ El código que escribimos (`<style>body * { background: blue !important; }</styl
 **Respuesta final a tu pregunta:**
 Sí, tu entendimiento es **perfecto**. El "Código Espantapájaros" es una herramienta pedagógica para forzar el uso de Shadow DOM, y tus conceptos de `CustomEvent` y `composed` son la clave técnica para que la comunicación funcione a través de las fronteras arquitectónicas que estamos diseñando.
 
-¿Estás listo para pasar al **Hito Práctico 2.2**, donde usaremos Angular Elements para generar este componente automáticamente con Shadow DOM y enviar estos eventos de forma nativa, sin tener que escribir JavaScript "sucio" manualmente?
+---
+
+# Guía de Configuración: Monorepo Nx + pnpm + Angular 19
+
+Esta guía documenta los comandos exactos para inicializar una arquitectura de Micro-Frontends utilizando Nx y pnpm, resolviendo los problemas comunes de anidamiento de carpetas y permisos de ejecución.
+
+## 1. Inicialización del Workspace Vacío
+
+El primer paso es crear la estructura base ("el cerebro") de Nx. Le decimos explícitamente que queremos un esquema orientado a aplicaciones (`apps`) y que usaremos `pnpm`.
+
+```bash
+npx create-nx-workspace@latest tractor-store --preset=apps --packageManager=pnpm --nxCloud=skip
+
+```
+
+* **`--preset=apps`**: Crea un monorepo pensado para tener múltiples proyectos (ideal para Micro-frontends), en lugar de un monolito.
+* **`--packageManager=pnpm`**: Configura internamente Nx para usar pnpm (generando el `pnpm-workspace.yaml`).
+* **`--nxCloud=skip`**: Evita la configuración de la caché remota de pago, manteniendo todo local.
+
+## 2. Reubicación en la Raíz (El "Merge" Arquitectónico)
+
+Por defecto, Nx crea una subcarpeta con el nombre del proyecto (`tractor-store`). Para mantener el repositorio de Git limpio y que Nx controle la raíz, movemos todo un nivel arriba y eliminamos la subcarpeta temporal.
+
+```bash
+# Mover archivos visibles
+cp -r tractor-store/* .
+
+# Mover archivos ocultos (como .nx, .eslintrc)
+cp -r tractor-store/.* . 2>/dev/null
+
+# Eliminar la carpeta temporal ya vacía
+rm -rf tractor-store
+
+```
+
+## 3. Aprobación de Scripts de pnpm (Seguridad)
+
+`pnpm` es un gestor de paquetes estricto. Por seguridad, bloquea la ejecución de scripts en segundo plano que herramientas como `nx` o `esbuild` necesitan para compilar sus binarios nativos. Debemos aprobarlos manualmente.
+
+```bash
+# Abre un menú interactivo. Seleccionar 'nx' con la barra espaciadora y presionar Enter.
+pnpm approve-builds
+
+# Instalar las dependencias con los permisos ya concedidos
+pnpm install
+
+```
+
+## 4. Instalación del Ecosistema Angular
+
+Nuestro workspace de Nx está vacío y es agnóstico. Tenemos que instalar el plugin oficial de Angular para enseñarle a Nx cómo generar y compilar aplicaciones Angular.
+
+```bash
+pnpm add -D @nx/angular
+
+```
+
+## 5. Generación de Aplicaciones (El Shell y los MFEs)
+
+Con Nx configurado, utilizamos sus generadores para crear la estructura de carpetas corporativa. En las versiones recientes de Nx (v22+), no se permiten nombres sueltos en el comando; todo debe indicarse a través de la bandera `--directory`.
+
+### Crear la aplicación principal (Host / Shell)
+
+Este comando creará automáticamente la carpeta `apps/shell`.
+
+```bash
+pnpm exec nx g @nx/angular:app --directory=apps/shell --routing --style=scss --standalone
+
+```
+
+*Al ejecutarlo, seleccionamos `none` para E2E/Unit tests (para mantener el proyecto ligero) y `N` en SSR.*
+
+### Crear un Micro-Frontend (Remote)
+
+Para simular el aislamiento de equipos, los Micro-frontends se generan en la carpeta `packages/`.
+
+```bash
+pnpm exec nx g @nx/angular:app --directory=packages/mfe-explore --routing --style=scss --standalone
+
+```
+
+---
