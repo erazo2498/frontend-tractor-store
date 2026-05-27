@@ -1,0 +1,33 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700&display=swap');
+
+:root {
+  /* =========================================
+     1. TOKENS PRIMITIVOS (La paleta cruda)
+     ========================================= */
+  --tractor-green-100: #dcfce7;
+  --tractor-green-500: #22c55e;
+  --tractor-green-700: #15803d;
+  --tractor-gray-100: #f3f4f6;
+  --tractor-gray-900: #111827;
+  
+  --spacing-4: 1rem;
+  --spacing-8: 2rem;
+
+  /* =========================================
+     2. TOKENS SEMÁNTICOS (Su propósito)
+     ========================================= */
+  --color-primary: var(--tractor-green-500);
+  --color-primary-dark: var(--tractor-green-700);
+  --color-surface: var(--tractor-gray-100);
+  --color-text-base: var(--tractor-gray-900);
+  
+  --font-family-base: 'Raleway', sans-serif;
+  --container-padding: var(--spacing-8);
+
+  /* =========================================
+     3. TOKENS DE COMPONENTE (Específicos)
+     ========================================= */
+  --ts-button-bg: var(--color-primary);
+  --ts-button-text: #ffffff;
+  --ts-card-bg: #ffffff;
+}

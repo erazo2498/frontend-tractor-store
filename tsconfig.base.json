@@ -16,7 +16,8 @@
       ],
       "@tractor-store/ts-design-system": [
         "./packages/ts-design-system/src/index.ts"
-      ]
+      ],
+      "@tractor-store/design-tokens": ["./packages/design-tokens/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "dist"]
