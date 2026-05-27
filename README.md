@@ -1,96 +1,85 @@
-# TractorStore
+# 🚜 The Tractor Store — Frontend Workspace (Angular 19 + Nx + pnpm)
 
-<a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
+Welcome to the frontend workspace for **The Tractor Store**, a state-of-the-art e-commerce architectural blueprint designed around **Micro-Frontends** using **Angular 19**, **Nx monorepo**, **pnpm workspaces**, and **TailwindCSS**.
 
-✨ Your new, shiny [Nx workspace](https://nx.dev) is ready ✨.
+---
 
-[Learn more about this workspace setup and its capabilities](https://nx.dev/getting-started/intro#learn-nx?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects) or run `npx nx graph` to visually explore what was created. Now, let's get you up to speed!
+## 🗺️ Workspace Structure
 
-## Run tasks
-
-To run tasks with Nx use:
-
-```sh
-npx nx <target> <project-name>
+```
+├── apps/
+│   └── shell/              # Shell host/orchestrator (Port 4200)
+├── packages/
+│   ├── mfe-checkout/       # MFE: Checkout and cart (Port 4201)
+│   ├── mfe-decide/         # MFE: Product decision page (Port 4202)
+│   ├── mfe-explore/        # MFE: Search & Catalog (Port 4203)
+│   ├── shared-catalog/     # Shared Angular models & utilities library
+│   └── ts-design-system/   # Shared Angular UI design system components
+├── playground/
+│   └── elements-lab/       # Experimental laboratory for Angular Elements (Port 4204)
+└── docs/                   # Architectural documentation & guides
 ```
 
-For example:
+---
 
-```sh
-npx nx build myproject
+## 📚 Architectural & Learning Documentation Hub
+
+We have compiled a comprehensive, premium-grade documentation system inside the `docs/` folder to guide you through the learning process and explain every design decision in detail:
+
+### 📖 [Main Documentation Hub (docs/README.md)](file:///home/quind/Proyects/quind/tractor-store/frontend-tractor-store/docs/README.md)
+*   **Vertical Domains:** Scope and responsibilities of Team Explore, Team Decide, and Team Checkout.
+*   **Web Components Deep Dive:** Pure JS concepts: DOM vs Shadow DOM, CustomEvents, and the `composed: true` event propagation passport.
+
+### 📦 Modular Learning Guides (Fase 3):
+1.  [**pnpm Workspaces & Dependency Management Guide** (docs/pnpm-workspaces-guide.md)](file:///home/quind/Proyects/quind/tractor-store/frontend-tractor-store/docs/pnpm-workspaces-guide.md)
+    *   *Highlights:* Automatic local linking via symlinks, secure `.npmrc` configuration for private registries, and the absolute importance of `--frozen-lockfile` in production CI/CD.
+2.  [**Nx Tooling & Caching Optimization Guide** (docs/nx-tooling-guide.md)](file:///home/quind/Proyects/quind/tractor-store/frontend-tractor-store/docs/nx-tooling-guide.md)
+    *   *Highlights:* Nx executors, generators, `namedInputs` & `targetDefaults` cache optimizations, local vs. distributed caching, and parallel executing with `nx affected`.
+3.  [**Tractor Store Physical Architecture Blueprint** (docs/hito-tractor-store-architecture.md)](file:///home/quind/Proyects/quind/tractor-store/frontend-tractor-store/docs/hito-tractor-store-architecture.md)
+    *   *Highlights:* Complete ports allocation mapping, ESLint strict architectural tags matrices (`type:shell`, `type:mfe`, `type:shared`), interactive graph representation, and Hito checklists.
+
+---
+
+## ⚡ Quick Start
+
+### 1. Load Node & Setup
+Make sure you have [NVM](https://github.com/nvm-sh/nvm) installed and active on your console:
+```bash
+# Load NVM and switch to Node 24 (recommended for Angular 19 inside this workspace)
+nvm use 24
 ```
 
-These targets are either [inferred automatically](https://nx.dev/concepts/inferred-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or defined in the `project.json` or `package.json` files.
+### 2. Install Dependencies
+```bash
+# Approve background builds (safe security step required by pnpm)
+pnpm approve-builds
 
-[More about running tasks in the docs &raquo;](https://nx.dev/features/run-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Add new projects
-
-While you could add new projects to your workspace manually, you might want to leverage [Nx plugins](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) and their [code generation](https://nx.dev/features/generate-code?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) feature.
-
-To install a new plugin you can use the `nx add` command. Here's an example of adding the React plugin:
-```sh
-npx nx add @nx/react
+# Install all workspace packages
+pnpm install
 ```
 
-Use the plugin's generator to create new projects. For example, to create a new React app or library:
-
-```sh
-# Generate an app
-npx nx g @nx/react:app demo
-
-# Generate a library
-npx nx g @nx/react:lib some-lib
+### 3. Run Development Server
+Serve all applications (Shell + all 3 remotes + playground) simultaneously:
+```bash
+pnpm exec nx run-many --target=serve --all
 ```
 
-You can use `npx nx list` to get a list of installed plugins. Then, run `npx nx list <plugin-name>` to learn about more specific capabilities of a particular plugin. Alternatively, [install Nx Console](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) to browse plugins and generators in your IDE.
+*   **Shell (Host):** `http://localhost:4200`
+*   **MFE Checkout:** `http://localhost:4201`
+*   **MFE Decide:** `http://localhost:4202`
+*   **MFE Explore:** `http://localhost:4203`
+*   **Elements Lab (Playground):** `http://localhost:4204`
 
-[Learn more about Nx plugins &raquo;](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) | [Browse the plugin registry &raquo;](https://nx.dev/plugin-registry?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+---
 
-## Set up CI!
+## 🛠️ Verification & Linting
 
-### Step 1
-
-To connect to Nx Cloud, run the following command:
-
-```sh
-npx nx connect
+Verify that all tags-based architectural boundaries are perfectly respected and there are no lint issues:
+```bash
+pnpm exec nx run-many --target=lint
 ```
 
-Connecting to Nx Cloud ensures a [fast and scalable CI](https://nx.dev/ci/intro/why-nx-cloud?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) pipeline. It includes features such as:
-
-- [Remote caching](https://nx.dev/ci/features/remote-cache?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Task distribution across multiple machines](https://nx.dev/ci/features/distribute-task-execution?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Automated e2e test splitting](https://nx.dev/ci/features/split-e2e-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Task flakiness detection and rerunning](https://nx.dev/ci/features/flaky-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-### Step 2
-
-Use the following command to configure a CI workflow for your workspace:
-
-```sh
-npx nx g ci-workflow
+Generate the dependency graph of your workspace to audit imports visually:
+```bash
+pnpm exec nx graph
 ```
-
-[Learn more about Nx on CI](https://nx.dev/ci/intro/ci-with-nx#ready-get-started-with-your-provider?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Install Nx Console
-
-Nx Console is an editor extension that enriches your developer experience. It lets you run tasks, generate code, and improves code autocompletion in your IDE. It is available for VSCode and IntelliJ.
-
-[Install Nx Console &raquo;](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Useful links
-
-Learn more:
-
-- [Learn more about this workspace setup](https://nx.dev/getting-started/intro#learn-nx?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects)
-- [Learn about Nx on CI](https://nx.dev/ci/intro/ci-with-nx?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Releasing Packages with Nx release](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [What are Nx plugins?](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-And join the Nx community:
-- [Discord](https://go.nx.dev/community)
-- [Follow us on X](https://twitter.com/nxdevtools) or [LinkedIn](https://www.linkedin.com/company/nrwl)
-- [Our Youtube channel](https://www.youtube.com/@nxdevtools)
-- [Our blog](https://nx.dev/blog?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
