@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700&display=swap');
 
-:root {
+/* Esta directiva le avisa a Tailwind v4 que estamos inyectando configuraciones globales */
+@theme {
   /* =========================================
      1. TOKENS PRIMITIVOS (La paleta cruda)
      ========================================= */
@@ -14,20 +15,28 @@
   --spacing-8: 2rem;
 
   /* =========================================
-     2. TOKENS SEMÁNTICOS (Su propósito)
+     2. TOKENS SEMÁNTICOS (Mapeados a Tailwind v4)
      ========================================= */
+  /* Al declarar --color-primary, Tailwind v4 crea automáticamente las utilidades bg-primary, text-primary, border-primary, etc. */
   --color-primary: var(--tractor-green-500);
   --color-primary-dark: var(--tractor-green-700);
   --color-surface: var(--tractor-gray-100);
-  --color-text-base: var(--tractor-gray-900);
   
+  /* Tailwind v4 mapea esto automáticamente a las fuentes (font-base) */
   --font-family-base: 'Raleway', sans-serif;
-  --container-padding: var(--spacing-8);
+  
+  /* Mapeado a los espaciados (p-container, m-container, etc.) */
+  --spacing-container: var(--spacing-8);
 
   /* =========================================
-     3. TOKENS DE COMPONENTE (Específicos)
+     3. TOKENS DE COMPONENTE (Para ts-design-system)
      ========================================= */
   --ts-button-bg: var(--color-primary);
   --ts-button-text: #ffffff;
   --ts-card-bg: #ffffff;
+}
+
+/* Configuramos variables nativas tradicionales en :root para el cuerpo general */
+:root {
+  --color-text-base: var(--tractor-gray-900);
 }
