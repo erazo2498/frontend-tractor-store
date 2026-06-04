@@ -1,0 +1,24 @@
+{
+  // Desactiva el validador nativo de CSS de VS Code para evitar falsos positivos
+  // con directivas específicas de Tailwind v4 como @theme, @utility, @apply, @source
+  "css.validate": false,
+  "scss.validate": false,
+
+  // Habilita la extensión oficial de Tailwind CSS IntelliSense como validador CSS
+  // (reemplaza al validador nativo con soporte real de Tailwind v4)
+  "editor.quickSuggestions": {
+    "strings": "on"
+  },
+
+  // Indica a la extensión Tailwind CSS IntelliSense dónde buscar clases en el monorepo
+  "tailwindCSS.experimental.classRegex": [
+    ["class=\"([^\"]*)", "[\"'`]([^\"'`]*).*?[\"'`]"]
+  ],
+
+  // Asocia los archivos de estilos globales con el soporte de Tailwind
+  "tailwindCSS.includeLanguages": {
+    "html": "html",
+    "typescript": "typescript",
+    "scss": "scss"
+  }
+}

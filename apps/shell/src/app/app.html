@@ -1,4 +1,32 @@
-<header>
-    <h1>🚜 Tractor Store - Shell</h1>
-</header>
-<router-outlet></router-outlet>
+<div class="min-h-screen flex flex-col font-base text-base">
+  
+  <header class="bg-primary text-white shadow-md">
+    <div class="max-w-7xl mx-auto px-container py-4 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <span class="text-3xl">🚜</span>
+        <h1 class="text-2xl font-bold tracking-tight">Tractor Store</h1>
+      </div>
+      <nav>
+        <ul class="flex gap-6 font-semibold">
+          <li class="hover:underline cursor-pointer">Catálogo</li>
+          <li class="hover:underline cursor-pointer">Mi Carrito</li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="grow max-w-7xl mx-auto w-full px-container py-8">
+    <div class="border-4 border-dashed border-gray-300 rounded-xl h-96 flex items-center justify-center bg-white shadow-sm">
+      <div class="text-center">
+        <h2 class="text-xl font-bold text-gray-500 mb-2">Área de Micro-Frontends</h2>
+        <p class="text-sm text-gray-400">Aquí se cargarán dinámicamente Explore, Decide y Checkout</p>
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+  </main>
+
+  <footer class="bg-gray-900 text-gray-400 text-sm py-6 text-center">
+    <p>© 2026 Tractor Store - Arquitectura Micro-Frontends</p>
+  </footer>
+
+</div>
